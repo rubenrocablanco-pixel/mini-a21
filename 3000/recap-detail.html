@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recap | Detalle</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg1:#1a1026;
+  --bg2:#0f061a;
+  --accent:#ff6b9d;
+  --accent-soft:#ffc2d9;
+  --text:#ffffff;
+  --muted:#cbbdd9;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Inter',sans-serif;
+  background:radial-gradient(circle at 20% 20%, #2a1240, var(--bg2));
+  color:var(--text);
+  min-height:100vh;
+}
+.wrap{max-width:1200px;margin:0 auto;padding:36px 20px 60px;}
+h1{
+  font-family:'Playfair Display',serif;
+  text-align:center;
+  font-size:clamp(2rem,5vw,3.2rem);
+  text-decoration:underline;
+  text-decoration-color:rgba(255,194,217,.75);
+  text-decoration-thickness:2px;
+  text-underline-offset:10px;
+}
+.lead{
+  text-align:center;
+  margin:18px auto 28px;
+  color:var(--muted);
+}
+.actions{
+  display:flex;
+  justify-content:center;
+  margin-bottom:26px;
+}
+.btn{
+  text-decoration:none;
+  padding:12px 28px;
+  border-radius:999px;
+  border:2px solid var(--accent);
+  color:var(--accent);
+  font-weight:700;
+}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:18px;
+}
+.card{
+  background:rgba(255,255,255,.05);
+  border-radius:18px;
+  overflow:hidden;
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+}
+.card img{
+  width:100%;
+  height:320px;
+  object-fit:cover;
+  display:block;
+}
+@media(max-width:700px){
+  .card img{height:260px;}
+}
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <h1 id="detailTitle">Recap</h1>
+    <p id="detailLead" class="lead"></p>
+    <div class="actions">
+      <a class="btn" href="gallery.html">Volver a galería</a>
+    </div>
+    <div id="detailGrid" class="grid"></div>
+  </div>
+
+<script>
+const collections = {
+  'viaje-inolvidable': {
+    title: 'Viaje inolvidable',
+    lead: 'Más recuerdos de este viaje.',
+    images: ['fotos/foto82.jpeg','fotos/foto16.jpeg','fotos/foto15.jpeg','fotos/foto14.jpeg','fotos/foto13.jpeg','fotos/foto12.jpeg']
+  },
+  'tardes-de-risas': {
+    title: 'Tarde de risas',
+    lead: 'Momentos que siempre sacan una sonrisa.',
+    images: ['fotos/foto5.jpeg','fotos/foto18.jpeg','fotos/foto19.jpeg','fotos/foto22.jpeg','fotos/foto23.jpeg','fotos/foto38.jpeg','fotos/foto37.jpeg','fotos/foto44.jpeg','fotos/foto72.jpeg','fotos/foto70.jpeg','fotos/foto77.jpeg','fotos/foto75.jpeg','fotos/foto63.jpeg','fotos/foto62.jpeg','fotos/foto64.jpeg','fotos/foto68.jpeg','fotos/foto66.jpeg','fotos/foto50.jpeg','fotos/foto51.jpeg','fotos/foto65.jpeg']
+  },
+  'cena-romantica': {
+    title: 'romanticones',
+    lead: 'Noche especial para recordar.',
+    images: ['fotos/foto65.jpeg','fotos/foto72.jpeg','fotos/foto69.jpeg','fotos/foto67.jpeg','fotos/foto21.jpeg','fotos/foto3.jpeg','fotos/foto12.jpeg','fotos/foto13.jpeg','fotos/foto14.jpeg','fotos/foto16.jpeg','fotos/foto33.jpeg','fotos/foto58.jpeg','fotos/foto82.jpeg','fotos/foto40.jpeg','fotos/foto46.jpeg','fotos/foto28.jpeg','fotos/foto74.jpeg']
+  },
+  'paseos-juntos': {
+    title: 'Paseos juntos',
+    lead: 'Pasos compartidos, recuerdos eternos.',
+    images: ['fotos/foto6.jpeg','fotos/foto24.jpeg','fotos/foto27.jpeg','fotos/foto47.jpeg','fotos/foto52.jpeg','fotos/foto69.jpeg','fotos/foto72.jpeg','fotos/foto49.jpeg']
+  },
+  'concertazo': {
+    title: 'Concertazo',
+    lead: 'Vibras, música y locura juntos.',
+    images: ['fotos/foto17.jpeg','fotos/foto55.jpeg','fotos/foto56.jpeg','fotos/foto57.jpeg','fotos/foto58.jpeg','fotos/foto59.jpeg','fotos/foto80.jpeg','fotos/foto79.jpeg']
+  }
+};
+
+const params = new URLSearchParams(location.search);
+const setKey = params.get('set') || '';
+const selected = collections[setKey];
+const grid = document.getElementById('detailGrid');
+const titleEl = document.getElementById('detailTitle');
+const leadEl = document.getElementById('detailLead');
+
+if(!selected){
+  titleEl.textContent = 'Recap';
+  leadEl.textContent = 'No se encontró ese álbum.';
+} else {
+  titleEl.textContent = selected.title;
+  leadEl.textContent = selected.lead;
+  selected.images.forEach((src, i)=>{
+    const card = document.createElement('div');
+    card.className = 'card';
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = `${selected.title} ${i + 1}`;
+    img.onerror = ()=>{ img.style.opacity = '0.45'; };
+    card.appendChild(img);
+    grid.appendChild(card);
+  });
+}
+</script>
+</body>
+</html>

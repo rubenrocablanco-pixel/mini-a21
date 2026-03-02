@@ -1,0 +1,1322 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Nuestro Año ✨</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg1:#1a1026;
+  --bg2:#0f061a;
+  --accent:#ff6b9d;
+  --accent-soft:#ffc2d9;
+  --text:#ffffff;
+  --muted:#cbbdd9;
+}
+body.demon{
+  background:radial-gradient(circle at 20% 20%, #3a0000, #100000) !important;
+  color:#ffdddd;
+} 
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:radial-gradient(circle at 20% 20%, #2a1240, var(--bg2));
+  color:var(--text);
+  overflow-x:hidden;
+}
+body.locked{
+  overflow:hidden;
+}
+body.locked > *:not(#accessGate){
+  visibility:hidden;
+}
+body.unlocked > *:not(#accessGate){
+  visibility:visible;
+}
+#accessGate{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  background:radial-gradient(circle at 20% 20%, #2a1240, var(--bg2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+#accessGate.hidden{
+  display:none;
+}
+.gate-card{
+  width:min(420px, 100%);
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
+  padding:24px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.45);
+  position:relative;
+  overflow:hidden;
+}
+.gate-card.success{
+  animation:gateSuccessPulse .9s ease forwards;
+}
+.gate-card h2{
+  font-family:'Playfair Display',serif;
+  margin-bottom:8px;
+}
+.gate-card p{
+  color:var(--muted);
+  margin-bottom:16px;
+}
+.gate-dots{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:14px;
+}
+.gate-dot{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.4);
+  background:transparent;
+}
+.gate-dot.filled{
+  background:var(--accent-soft);
+  border-color:var(--accent-soft);
+}
+.gate-dot.burst{
+  animation:dotBurst .5s ease;
+}
+.gate-status{
+  min-height:24px;
+  font-weight:600;
+  margin-bottom:14px;
+}
+.gate-pad{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:10px;
+}
+.gate-key{
+  border:none;
+  border-radius:14px;
+  padding:12px;
+  font-size:1rem;
+  font-weight:700;
+  cursor:pointer;
+  background:rgba(255,255,255,.15);
+  color:#fff;
+}
+.gate-key:hover{
+  background:rgba(255,255,255,.24);
+}
+.gate-heart{
+  position:absolute;
+  font-size:18px;
+  pointer-events:none;
+  animation:gateHeartUp 900ms ease-out forwards;
+  z-index:2;
+}
+@keyframes gateSuccessPulse{
+  0%{transform:scale(1); box-shadow:0 20px 60px rgba(0,0,0,.45);}
+  45%{transform:scale(1.04); box-shadow:0 0 30px rgba(255,194,217,.55), 0 20px 60px rgba(0,0,0,.45);}
+  100%{transform:scale(1);}
+}
+@keyframes gateHeartUp{
+  0%{transform:translateY(0) scale(.7); opacity:0;}
+  20%{opacity:1;}
+  100%{transform:translateY(-120px) scale(1.25); opacity:0;}
+}
+@keyframes dotBurst{
+  0%{transform:scale(1);}
+  40%{transform:scale(1.35);}
+  100%{transform:scale(1);}
+}
+
+section{padding:80px 20px;max-width:1200px;margin:auto}
+
+h1,h2{
+  font-family:'Playfair Display',serif;
+}
+
+.hero{
+  min-height:auto;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+  padding-top:60px;
+  padding-bottom:20px;
+}
+/* global animation layers behind content but above background */
+#globalHearts, #globalEmoji{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+#hearts{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+/* ensure primary content floats above animations */
+.hero h1, .hero p, .hero-buttons, .gallery, .timeline, footer{position:relative;z-index:1;}
+
+.hero h1 {
+  font-size: clamp(2.8rem, 6vw, 9rem);
+  background: linear-gradient(90deg, #ff3366, #ff6b6b, #ff9f43);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  line-height: 1.05;
+  margin: 0 0 1.5rem;
+}
+
+.hero p{
+  margin-top:20px;
+  font-size:1.3rem;
+  color:var(--muted);
+  max-width:700px;
+}
+
+.button{
+  margin-top:40px;
+  padding:16px 36px;
+  border-radius:50px;
+  border:none;
+  background:linear-gradient(135deg,var(--accent),#ff9ecb);
+  color:#2a0f1f;
+  font-weight:700;
+  cursor:pointer;
+  font-size:1rem;
+  box-shadow:0 10px 40px rgba(255,107,157,.4);
+  transition:.3s ease;
+}
+
+.button:hover{
+  transform:scale(1.07);
+}
+.btn-icon{width:20px;height:20px;vertical-align:middle;margin-left:6px;filter:invert(1);}
+
+.button.ghost{
+  background:transparent;
+  color:var(--accent);
+  border:2px solid var(--accent);
+  box-shadow:none;
+}
+.hero-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:20px;}
+
+/* iPod style player */
+.ipod-player{
+  margin-top:30px;
+  perspective:900px;
+}
+.ipod-device{
+  width:290px;
+  padding:20px 20px 26px;
+  border-radius:28px;
+  background:linear-gradient(140deg,#f7f7f7 0%,#cacaca 38%,#ededed 100%);
+  box-shadow:0 22px 45px rgba(0,0,0,.35), inset -8px -8px 16px rgba(255,255,255,.85), inset 10px 10px 18px rgba(0,0,0,.16);
+  animation:ipodFloat 4s ease-in-out infinite;
+  transform-style:preserve-3d;
+}
+.ipod-screen{
+  background:#12141c;
+  border:3px solid #21242e;
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:inset 0 0 0 2px #9da1aa;
+}
+.screen-header{
+  background:linear-gradient(180deg,#4f5668 0%, #313642 100%);
+  color:#fff;
+  padding:5px 8px;
+  font-size:.74rem;
+  text-align:left;
+  font-weight:600;
+}
+.screen-content{
+  padding:0;
+  color:#111;
+  background:#12141c;
+}
+.spotify-frame{
+  background:#12141c;
+  width:100%;
+  height:152px;
+  border:0;
+  border-radius:0;
+}
+.track-meta{
+  text-align:center;
+  margin-bottom:8px;
+}
+#trackTitle{
+  font-size:.9rem;
+  font-weight:700;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+#trackArtist{
+  font-size:.72rem;
+  color:#474e5c;
+  margin-top:2px;
+}
+#trackCover{
+  width:100%;
+  height:120px;
+  object-fit:cover;
+  border:1px solid #b5bbc9;
+  border-radius:6px;
+  display:block;
+}
+.progress-shell{
+  width:100%;
+  height:5px;
+  border-radius:999px;
+  margin:8px 0 10px;
+  background:#d9dbe2;
+  overflow:hidden;
+}
+#trackProgress{
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,#4f94ff,#6fd4ff);
+}
+.track-list{
+  list-style:none;
+  max-height:74px;
+  overflow:auto;
+  font-size:.72rem;
+  border-top:1px solid #dadde5;
+  padding-top:4px;
+}
+.track-list li{
+  padding:4px 6px;
+  border-radius:5px;
+  cursor:pointer;
+}
+.track-list li.active{
+  background:#dde9ff;
+  color:#224177;
+  font-weight:600;
+}
+.track-list.hidden{display:none;}
+.click-wheel{
+  width:182px;
+  height:182px;
+  margin:18px auto 0;
+  border-radius:50%;
+  position:relative;
+  background:radial-gradient(circle at 32% 28%,#4a4f5c 10%,#1f222a 70%, #111319 100%);
+  box-shadow:inset -8px -8px 14px rgba(255,255,255,.08), inset 10px 10px 15px rgba(0,0,0,.55);
+}
+.wheel-btn{
+  position:absolute;
+  border:none;
+  background:transparent;
+  color:#f0f0f0;
+  cursor:pointer;
+  font-weight:700;
+  font-size:1rem;
+}
+.wheel-btn:hover{color:#fff;}
+#wheelMenu{top:14px;left:50%;transform:translateX(-50%);font-size:.78rem;letter-spacing:.1em;}
+#prevTrack{left:20px;top:50%;transform:translateY(-50%);}
+#nextTrack{right:20px;top:50%;transform:translateY(-50%);}
+#wheelPlayPause{bottom:16px;left:50%;transform:translateX(-50%);font-size:.85rem;}
+.wheel-center{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  width:82px;
+  height:82px;
+  border-radius:50%;
+  border:none;
+  background:linear-gradient(145deg,#f7f7f7,#cbcccf);
+  color:#101114;
+  font-size:1.6rem;
+  cursor:pointer;
+  box-shadow:inset -3px -3px 8px rgba(255,255,255,.9), inset 5px 5px 10px rgba(0,0,0,.15);
+}
+.wheel-center:active{transform:translate(-50%,-50%) scale(.96);}
+@keyframes ipodFloat{
+  0%,100%{transform:rotateY(-5deg) translateY(0);}
+  50%{transform:rotateY(5deg) translateY(-8px);}
+}
+/* emoji rain */
+.emoji{position:absolute;font-size:24px;animation:fall 6s linear infinite;pointer-events:none;}
+@keyframes fall{0%{transform:translateY(-40px) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(360deg);opacity:0;}}
+/* surprise overlay */
+.overlay{
+  position:fixed;inset:0;
+  background:rgba(0,0,0,0.85);
+  display:flex;align-items:center;justify-content:center;
+  padding:20px;z-index:100;backdrop-filter:blur(4px);
+  opacity:0;pointer-events:none;transition:opacity .3s;
+}
+.overlay.show{opacity:1;pointer-events:auto;}
+.overlay .popup{
+  background:linear-gradient(135deg,rgba(255,255,255,0.1),rgba(255,255,255,0.05));
+  padding:30px;border-radius:20px;max-width:500px;text-align:center;
+}
+.overlay .popup h2{font-family:'Playfair Display',cursive;font-size:2.5rem;margin-bottom:.5rem;}
+.overlay .popup img{max-width:100%;height:auto;display:block;margin:12px auto;}
+.overlay .popup p{line-height:1.5;margin-bottom:1.5rem;}
+.overlay .popup button{background:var(--accent);color:#2a0f1f;padding:10px 20px;border:none;border-radius:40px;cursor:pointer;box-shadow:0 4px 20px rgba(0,0,0,0.2);}
+@media print{
+  body{background:#fff;color:#000;}
+  .button,.hero-buttons{display:none;}
+}
+
+.glass{
+  background:rgba(255,255,255,.05);
+  backdrop-filter:blur(12px);
+  border-radius:25px;
+  padding:50px;
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+
+.names{
+  font-size:2.5rem;
+  margin-bottom:20px;
+}
+
+.message{
+  font-size:1.2rem;
+  line-height:1.8;
+  color:var(--muted);
+  white-space:pre-line;
+}
+
+.gallery{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:12px;
+  margin-top:25px;
+}
+
+.gallery img{
+  width:100%;
+  height:320px;
+  object-fit:cover;
+  border-radius:20px;
+  transition:.5s ease;
+  box-shadow:0 15px 40px rgba(0,0,0,.5);
+}
+
+.gallery img:hover{
+  transform:scale(1.05);
+}
+
+.timeline{
+  margin-top:70px;
+  display:grid;
+  gap:30px;
+}
+
+.timeline-item{
+  background:rgba(255,255,255,.06);
+  padding:30px;
+  border-radius:20px;
+  transition:.4s;
+}
+
+.timeline-item:hover{
+  transform:translateY(-6px);
+}
+
+.countdown{
+  display:flex;
+  justify-content:center;
+  gap:30px;
+  margin-top:50px;
+  flex-wrap:wrap;
+}
+.countdown-title{
+  margin-top:40px;
+  text-align:center;
+  color:var(--accent-soft);
+  font-weight:600;
+}
+.top-left-countdown{
+  position:fixed;
+  top:14px;
+  left:14px;
+  z-index:250;
+  background:rgba(0,0,0,.38);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:14px;
+  padding:10px;
+  backdrop-filter:blur(8px);
+}
+.top-left-countdown .label{
+  font-size:.72rem;
+  color:var(--accent-soft);
+  margin-bottom:6px;
+  text-align:left;
+}
+.top-left-countdown .mini-row{
+  display:flex;
+  gap:8px;
+}
+.top-left-countdown .mini-box{
+  min-width:56px;
+  background:rgba(255,255,255,.1);
+  border-radius:10px;
+  padding:6px 8px;
+  text-align:center;
+}
+.top-left-countdown .mini-box span{
+  display:block;
+  font-weight:700;
+  font-size:1rem;
+}
+.top-left-countdown .mini-box small{
+  font-size:.68rem;
+  color:var(--muted);
+}
+
+.time-box{
+  background:rgba(255,255,255,.08);
+  padding:25px 35px;
+  border-radius:20px;
+  text-align:center;
+  min-width:120px;
+}
+
+.time-box span{
+  font-size:2rem;
+  font-weight:600;
+  color:var(--accent-soft);
+}
+
+footer{
+  text-align:center;
+  padding:50px 20px;
+  color:var(--muted);
+}
+
+/* floating hearts */
+.heart{
+  position:absolute;
+  width:20px;
+  height:20px;
+  background:var(--accent);
+  transform:rotate(-45deg);
+  animation:float 8s linear infinite;
+}
+
+.heart::before,
+.heart::after{
+  content:'';
+  position:absolute;
+  width:20px;
+  height:20px;
+  background:var(--accent);
+  border-radius:50%;
+}
+
+.heart::before{top:-10px;left:0}
+.heart::after{left:10px;top:0}
+
+@keyframes float{
+  0%{transform:translateY(100vh) rotate(-45deg);opacity:0}
+  20%{opacity:1}
+  100%{transform:translateY(-10vh) rotate(-45deg);opacity:0}
+}
+
+@media(max-width:700px){
+  .glass{padding:30px}
+  .gallery img{height:220px}
+  .top-left-countdown{
+    top:10px;
+    left:10px;
+    transform:scale(.92);
+    transform-origin:top left;
+  }
+}
+</style>
+</head>
+<body class="locked">
+<noscript><p style="text-align:center;color:#f88;padding:20px;">Activa JavaScript para ver esta página correctamente.</p></noscript>
+<div id="accessGate" role="dialog" aria-modal="true" aria-label="Código de acceso">
+  <div class="gate-card">
+    <h2>Código de acceso</h2>
+    <p>Solo tú sabes la clave</p>
+    <div class="gate-dots" id="gateDots" aria-hidden="true">
+      <span class="gate-dot"></span>
+      <span class="gate-dot"></span>
+      <span class="gate-dot"></span>
+      <span class="gate-dot"></span>
+      <span class="gate-dot"></span>
+      <span class="gate-dot"></span>
+    </div>
+    <div class="gate-status" id="status"></div>
+    <div class="gate-pad">
+      <button class="gate-key" data-digit="1">1</button>
+      <button class="gate-key" data-digit="2">2</button>
+      <button class="gate-key" data-digit="3">3</button>
+      <button class="gate-key" data-digit="4">4</button>
+      <button class="gate-key" data-digit="5">5</button>
+      <button class="gate-key" data-digit="6">6</button>
+      <button class="gate-key" data-digit="7">7</button>
+      <button class="gate-key" data-digit="8">8</button>
+      <button class="gate-key" data-digit="9">9</button>
+      <button class="gate-key" id="clearCode">C</button>
+      <button class="gate-key" data-digit="0">0</button>
+      <button class="gate-key" id="delCode">⌫</button>
+    </div>
+  </div>
+</div>
+<div id="versionBanner" style="position:fixed;top:0;left:0;width:100%;background:#ff6b9d;color:#2a0f1f;text-align:center;padding:4px 0;font-size:0.9rem;z-index:200;transition:opacity .6s;">VERSIÓN ACTUALIZADA</div>
+
+<div id="globalHearts" aria-hidden="true"></div>
+<div id="globalEmoji" aria-hidden="true"></div>
+<div class="top-left-countdown" id="topLeftCountdown" aria-live="polite">
+  <div class="label">Para nuestro próximo 9 de marzo</div>
+  <div class="mini-row">
+    <div class="mini-box"><span id="topDays">0</span><small>Días</small></div>
+    <div class="mini-box"><span id="topHours">0</span><small>Horas</small></div>
+    <div class="mini-box"><span id="topMinutes">0</span><small>Min</small></div>
+  </div>
+</div>
+
+<section class="hero">
+  <h1 id="titleText">Un Año Contigo ✨</h1>
+  <p id="subtitleText">Hace un año empezó algo que cambió mi mundo. Y si pudiera volver atrás, elegiría el mismo momento, la misma sonrisa, la misma historia.</p>
+  <div class="hero-buttons">
+    <button class="button" id="surpriseBtn" title="Mensaje secreto + confetti">🎉 Sorpresa</button>
+    <button class="button ghost" id="galleryBtn">🖼 Ver galería</button>
+    <button class="button ghost" id="shareBtn">🔗 Compartir</button>
+    <button class="button ghost" id="modeBtn" title="Lluvia de corazones">❤️</button>
+  </div>
+
+  <div id="audioContainer" class="ipod-player" aria-label="Reproductor estilo iPod">
+    <div class="ipod-device">
+      <div class="ipod-screen">
+        <div class="screen-header">MvrkPod</div>
+        <div class="screen-content">
+          <div id="spotifyPlaylistFrame" class="spotify-frame" aria-label="Spotify Playlist"></div>
+        </div>
+      </div>
+      <div class="click-wheel">
+        <button id="wheelMenu" class="wheel-btn" title="Reiniciar lista">MENU</button>
+        <button id="prevTrack" class="wheel-btn" title="Pista anterior">⏮</button>
+        <button id="nextTrack" class="wheel-btn" title="Siguiente pista">⏭</button>
+        <button id="wheelPlayPause" class="wheel-btn" title="Reproducir/Pausar">▶︎∥</button>
+        <button id="playPause" class="wheel-center" title="Reproducir/Pausar">▶︎</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="glass">
+    <div class="names">Roca & Amor</div>
+    <div class="message" id="mainMessage">
+      365 días demostrándome que el amor de verdad
+      no es perfecto, es real.
+      Es reírnos de tonterías a las 3 de la mañana, enfadarnos todo el dia el uno con el otro por el miedo a perderle,
+      es abrazarte cuando el mundo pesa,
+      es saber que, pase lo que pase, siempre volveremos al mismo lugar: nosotros.
+
+      Gracias por este primer año, mi amor.
+      Es el primero de muchos, lo tengo calrisimo ❤️
+    </div>
+
+    <div class="countdown-title">Tiempo que llevamos juntos desde el 9 de marzo de 2025</div>
+    <div class="countdown" id="countdownContainer">
+      <div class="time-box"><span id="togetherDays">0</span><br>Días</div>
+      <div class="time-box"><span id="togetherHours">0</span><br>Horas</div>
+      <div class="time-box"><span id="togetherMinutes">0</span><br>Min</div>
+    </div>
+  </div>
+
+  <div class="gallery" id="gallerySection" aria-live="polite">
+    <!-- imágenes añadidas por JS -->
+  </div>
+
+  <div class="timeline" id="timelineSection">
+    <!-- timeline añadido por JS -->
+  </div>
+</section>
+
+<footer>
+  Feliz primer aniversario ❤️ Lo mejor está por venir.
+</footer>
+
+<!-- surprise modal -->
+<div id="overlay" class="overlay" role="dialog" aria-modal="true" aria-hidden="true">
+  <div class="popup">
+    <h2>Feliz aniversario</h2>
+    <img id="popupImage" src="" alt="" style="max-width:100%;border-radius:12px;margin:12px 0;display:none;">
+    <p id="popupMessage"></p>
+    <button id="closePopup">Cerrar</button>
+  </div>
+</div>
+
+<script>
+console.log('lita.html script loaded');
+const gateElement = document.getElementById('accessGate');
+const gateCard = document.querySelector('#accessGate .gate-card');
+const statusElement = document.getElementById('status');
+const dotElements = Array.from(document.querySelectorAll('#gateDots .gate-dot'));
+const correctCombination = ['0','9','0','4','2','5'];
+let currentCombination = [];
+
+function updateGateDots(){
+  dotElements.forEach((dot, index)=>{
+    dot.classList.toggle('filled', index < currentCombination.length);
+  });
+}
+function closeGate(){
+  try{ sessionStorage.setItem('loveUnlocked', '1'); }catch(e){}
+  document.body.classList.remove('locked');
+  document.body.classList.add('unlocked');
+  if(gateElement) gateElement.classList.add('hidden');
+}
+function resetEntry(message){
+  currentCombination = [];
+  updateGateDots();
+  if(statusElement){
+    statusElement.textContent = message || '';
+    statusElement.style.color = '#fff';
+  }
+}
+function checkCombination() {
+  if (!statusElement) return;
+  if (currentCombination.join('') === correctCombination.join('')) {
+    statusElement.textContent = '¡Nuestro amor!';
+    statusElement.style.color = '#ffccd5';
+    playUnlockAnimation();
+    setTimeout(() => {
+      closeGate();
+    }, 1000);
+  } else {
+    statusElement.textContent = 'Intenta de nuevo, mi amor';
+    statusElement.style.color = '#fff';
+    setTimeout(() => resetEntry(''), 900);
+  }
+}
+function playUnlockAnimation(){
+  if(!gateCard) return;
+  gateCard.classList.remove('success');
+  void gateCard.offsetWidth;
+  gateCard.classList.add('success');
+  dotElements.forEach((dot, index)=>{
+    setTimeout(()=>{
+      dot.classList.remove('burst');
+      void dot.offsetWidth;
+      dot.classList.add('burst');
+    }, index * 40);
+  });
+  for(let i=0;i<16;i++){
+    const heart = document.createElement('span');
+    heart.className = 'gate-heart';
+    heart.textContent = Math.random() < 0.5 ? '❤' : '✨';
+    heart.style.left = `${Math.random() * 90 + 5}%`;
+    heart.style.bottom = `${Math.random() * 30 + 20}px`;
+    heart.style.animationDelay = `${Math.random() * 120}ms`;
+    gateCard.appendChild(heart);
+    setTimeout(()=> heart.remove(), 950);
+  }
+}
+function pushDigit(value){
+  if(currentCombination.length >= correctCombination.length) return;
+  currentCombination.push(String(value));
+  updateGateDots();
+  if(currentCombination.length === correctCombination.length){
+    checkCombination();
+  }
+}
+
+let gateUnlockedFromSession = false;
+try{
+  gateUnlockedFromSession = sessionStorage.getItem('loveUnlocked') === '1';
+} catch(e){
+  gateUnlockedFromSession = false;
+}
+if(gateUnlockedFromSession){
+  closeGate();
+} else {
+  document.body.classList.add('locked');
+  document.body.classList.remove('unlocked');
+}
+document.querySelectorAll('.gate-key[data-digit]').forEach((key)=>{
+  key.addEventListener('click', ()=> pushDigit(key.dataset.digit));
+});
+const clearCodeBtn = document.getElementById('clearCode');
+if(clearCodeBtn){
+  clearCodeBtn.addEventListener('click', ()=> resetEntry(''));
+}
+const delCodeBtn = document.getElementById('delCode');
+if(delCodeBtn){
+  delCodeBtn.addEventListener('click', ()=>{
+    if(!currentCombination.length) return;
+    currentCombination.pop();
+    updateGateDots();
+  });
+}
+document.addEventListener('keydown', (evt)=>{
+  if(gateUnlockedFromSession) return;
+  if(gateElement && gateElement.classList.contains('hidden')) return;
+  if(evt.key >= '0' && evt.key <= '9'){
+    pushDigit(evt.key);
+    return;
+  }
+  if(evt.key === 'Backspace'){
+    evt.preventDefault();
+    currentCombination.pop();
+    updateGateDots();
+    return;
+  }
+  if(evt.key.toLowerCase() === 'c'){
+    resetEntry('');
+  }
+});
+// show banner only once per session
+if(!localStorage.getItem('seenVersion')){
+  localStorage.setItem('seenVersion','1');
+  // hide banner after couple seconds
+  setTimeout(()=>{ const vb=document.getElementById('versionBanner'); if(vb) vb.style.opacity='0'; },5000);
+} else {
+  const vb=document.getElementById('versionBanner'); if(vb) vb.style.opacity='0';
+}
+
+const CONFIG = {
+  name1:'Ruben',
+  name2:'Paula',
+  // anniversaryDate unused now; countdown calculates next March 9 automatically
+  anniversaryDate:'2026-03-02',
+  musicUrl:'',
+  photos:[
+    'fotos/foto32.jpeg',
+    'fotos/foto15.jpeg',
+    'fotos/foto28.jpeg'
+  ],
+  secretMessage:'Eres mi lugar favorito en el mundo. Gracias por este año increíble ❤️',
+  surpriseImage:'https://via.placeholder.com/800x400?text=Te+quiero',
+  timeline:[
+    {title:'Primera Cita',desc:'No tuvimos nunca nuestra primera cita super especial mi niña, pero no cambio por nda en el mundo nuestro gran dia en los contenedores, con las estrellas sobrepasando por nuestras cabezas y yo recuerdo como si fuera ayer la cantidad de nervios que sentía y todavía siento cuando te veo. Ese dia ese 11 de enero de 2025, siempre lo voy a recordar mi niña, yo nunca soy de celebrar mi cumpleaños ya lo sabes tu, pero ese dia solo tenia un objetivo y era empezar esta mágica, preciosa( como tu ;)) e increíble historia de amor que no va aparar nunca.'},
+    {title:'Primer Viaje',desc:'Nuestro primer viaje, en valencia los dos como si estuviéramos viviendo solos en nuestra casa, jajaja fue como un adelanto del futuro, de un futuro enorme que veo a tu lado, lleno de alegrías, llantos, risas, y sobre todo locuras a tu lado mi bebe este viaje me encanto, me llevo miles de recuerdos inolvidables como, todas las noches que dormíamos cada vez que me levantaba y me hiba a la cama de abajo y t miraba me quedaba como 5 minutos observando maravillado lo increíble y perfecta que eres, y de la enorme suerte que tengo de tenerte a mi lado, tambien nunca se me olvidara jajajaj la vez que te salió el backflip, en no se 2 intentos , nuestros records de esa época y todos los días que a pesar de estar trabajando tu me esperabas en casita con una sonrisa de oreja a oreja, t quiero millones mi bebe'},
+    {title:'Nuestros Momentos',desc:'Si estás leyendo esto, es porque todo lo que siento por ti necesitaba un sitio propio en el mundo. Y qué mejor lugar que algo que he construido yo.\n\nNo eres solo la persona que quiero. Eres la persona con la que soy yo sin filtros, sin defensas y sin miedo. Desde que llegaste, los días normales tienen algo especial. No porque siempre sean perfectos, sino porque los comparto contigo.\n\nMe gusta lo que somos. Me gusta cómo discutimos y luego aprendemos. Me gusta cómo nos apoyamos. Me gusta que no jugamos a querernos, sino que lo hacemos de verdad.\n\nNo te prometo una historia sin dificultades. Te prometo algo mejor: constancia, respeto, lealtad y ganas de elegirte incluso cuando sea complicado.\n\nSi el futuro tiene nombre, para mí suena un poco al tuyo.\n\nY si alguna vez dudas de cuánto te quiero, vuelve aquí.\nEsto no es una frase bonita. Es una decisión diaria.\n\nTe elijo. Hoy y las veces que hagan falta.💕'}
+  ],
+  spotifyPlaylistUrl:'https://open.spotify.com/playlist/1TvHPEsbb1aB8ldHqVRChi?si=bd1fd8d3b5534115',
+  localTracks:[
+    {
+      title:'SoundHelix 1',
+      artist:'Fallback Audio',
+      src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3'
+    },
+    {
+      title:'SoundHelix 2',
+      artist:'Fallback Audio',
+      src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3'
+    }
+  ],
+  demonMessage:'Cuando el demonio despierta, las palabras se visten de fuego y deseo...',
+  demonPhotos:[],
+  demonTimeline:[
+    {title:'Noche de locura',desc:'Recuerdo que no puedo contar…'},
+    {title:'Secretos',desc:'Lo que queda entre nosotros'},
+  ]
+};
+
+function $(selector){ return document.querySelector(selector); }
+
+// apply config text
+$('#titleText').textContent = 'Un Año Contigo ✨';
+$('#subtitleText').textContent = 'Hace un año empezó algo que cambió mi mundo. Y si pudiera volver atrás, elegiría el mismo momento, la misma sonrisa, la misma historia.';
+$('.names') && ($('.names').textContent = `${CONFIG.name1} & ${CONFIG.name2}`);
+// update any hardcoded placeholders
+$('#titleText').textContent = 'Un Año Contigo ✨';
+$('#subtitleText').textContent = 'Hace un año empezó algo que cambió mi mundo. Y si pudiera volver atrás, elegiría el mismo momento, la misma sonrisa, la misma historia.';
+$('#mainMessage').textContent = `365 días demostrándome que el amor de verdad
+no es perfecto, es real.
+Es reírnos de tonterías a las 3 de la mañana, enfadarnos todo el dia el uno con el otro por el miedo a perderle,
+es abrazarte cuando el mundo pesa,
+es saber que, pase lo que pase, siempre volveremos al mismo lugar: nosotros.
+
+Gracias por este primer año, mi amor.
+Es el primero de muchos, lo tengo calrisimo ❤️`;
+
+// anniversary/together counters
+function nextMarch9(){
+  const now = new Date();
+  const year = now.getFullYear();
+  let target = new Date(`${year}-03-09T00:00:00`);
+  if(target <= now){
+    target = new Date(`${year+1}-03-09T00:00:00`);
+  }
+  return target;
+}
+const relationshipStartDate = new Date('2025-03-09T00:00:00');
+
+// build gallery safely
+function buildGallery(photos){
+  const gallery = document.getElementById('gallerySection');
+  gallery.innerHTML = '';
+  photos.forEach((src, i)=>{
+    const img = document.createElement('img');
+    img.src = src;
+    img.alt = `Foto ${i+1}`;
+    img.onerror = ()=>{ img.style.opacity='0.5'; img.alt='imagen no disponible'; };
+    gallery.appendChild(img);
+  });
+}
+buildGallery(CONFIG.photos);
+
+// build timeline
+function buildTimeline(items){
+  const tl = document.getElementById('timelineSection');
+  tl.innerHTML = '';
+  items.forEach(it=>{
+    const div = document.createElement('div');
+    div.className = 'timeline-item';
+    div.innerHTML = `<h2>${it.title}</h2><p>${it.desc}</p>`;
+    tl.appendChild(div);
+  });
+}
+buildTimeline(CONFIG.timeline);
+
+// countdowns
+let countdownInterval;
+function updateTopCountdown(){
+  const now = new Date();
+  const anniversaryDate = nextMarch9();
+  const diff = anniversaryDate - now;
+  const daysEl = $('#topDays'), hoursEl = $('#topHours'), minutesEl = $('#topMinutes');
+  if(!daysEl || !hoursEl || !minutesEl) return;
+  if(diff <= 0){
+    daysEl.textContent = '0';
+    hoursEl.textContent = '0';
+    minutesEl.textContent = '0';
+    return;
+  }
+  const days = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff / (1000*60*60)) % 24);
+  const minutes = Math.floor((diff / (1000*60)) % 60);
+  daysEl.textContent = days;
+  hoursEl.textContent = hours;
+  minutesEl.textContent = minutes;
+}
+function updateTogetherCounter(){
+  const now = new Date();
+  const diff = Math.max(0, now - relationshipStartDate);
+  const daysEl = $('#togetherDays'), hoursEl = $('#togetherHours'), minutesEl = $('#togetherMinutes');
+  if(!daysEl || !hoursEl || !minutesEl) return;
+  const days = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff / (1000*60*60)) % 24);
+  const minutes = Math.floor((diff / (1000*60)) % 60);
+  daysEl.textContent = days;
+  hoursEl.textContent = hours;
+  minutesEl.textContent = minutes;
+}
+function updateAllCounters(){
+  updateTopCountdown();
+  updateTogetherCounter();
+}
+countdownInterval = setInterval(updateAllCounters, 1000);
+updateAllCounters();
+
+// surprise confetti + modal
+function launchConfetti(){
+  const canvas = document.createElement('canvas');
+  canvas.style.position='fixed';
+  canvas.style.left='0';
+  canvas.style.top='0';
+  canvas.style.width='100%';
+  canvas.style.height='100%';
+  canvas.style.pointerEvents='none';
+  canvas.style.zIndex='9999';
+  document.body.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  let W = canvas.width = window.innerWidth;
+  let H = canvas.height = window.innerHeight;
+  const pieces = [];
+  const style = getComputedStyle(document.documentElement);
+  const colors = [
+    style.getPropertyValue('--accent').trim() || '#ff6b9d',
+    style.getPropertyValue('--accent-soft').trim() || '#ffc2d9',
+    '#fff'
+  ];
+  for(let i=0;i<150;i++){
+    pieces.push({
+      x: Math.random()*W,
+      y: Math.random()*H - H,
+      r: Math.random()*6+4,
+      d: Math.random()*20+10,
+      color: colors[Math.floor(Math.random()*colors.length)],
+      tilt: Math.random()*10-10,
+      tiltAngleIncremental: Math.random()*0.07+0.05,
+      tiltAngle: 0
+    });
+  }
+  function draw(){
+    ctx.clearRect(0,0,W,H);
+    pieces.forEach(p=>{
+      ctx.beginPath();
+      ctx.lineWidth = p.r;
+      ctx.strokeStyle = p.color;
+      ctx.moveTo(p.x + p.tilt + p.r/2, p.y);
+      ctx.lineTo(p.x + p.tilt, p.y + p.tilt + p.r/2);
+      ctx.stroke();
+    });
+    update();
+  }
+  function update(){
+    pieces.forEach(p=>{
+      p.tiltAngle += p.tiltAngleIncremental;
+      p.y += (Math.cos(p.d) + 3 + p.r/2) / 2;
+      p.tilt = Math.sin(p.tiltAngle) * 15;
+      if(p.y > H){ p.x = Math.random()*W; p.y = -20; }
+    });
+  }
+  (function animate(){ draw(); requestAnimationFrame(animate); })();
+  setTimeout(()=> canvas.remove(), 5000);
+}
+function showSurprise(){
+  launchConfetti();
+  $('#popupMessage').textContent = CONFIG.secretMessage || '';
+  const img = $('#popupImage');
+  img.src = CONFIG.surpriseImage || '';
+  img.style.display = img.src ? 'block' : 'none';
+  $('#overlay').classList.add('show');
+  $('#overlay').setAttribute('aria-hidden','false');
+}
+$('#surpriseBtn').addEventListener('click', ()=>{ window.location.href = 'sorpresa.html'; });
+$('#closePopup').addEventListener('click', ()=> {
+  $('#overlay').classList.remove('show');
+  $('#overlay').setAttribute('aria-hidden','true');
+});
+
+// spotify player in iPod screen
+const playBtn = $('#playPause');
+const prevBtn = $('#prevTrack');
+const nextBtn = $('#nextTrack');
+const wheelPlayPause = $('#wheelPlayPause');
+const wheelMenu = $('#wheelMenu');
+const spotifyFrame = $('#spotifyPlaylistFrame');
+let spotifyController = null;
+let spotifyIsPlaying = false;
+let spotifyApi = null;
+let spotifyFallbackMode = false;
+let spotifyPlaybackPositionMs = 0;
+const FORCE_LOCAL_AUDIO = false;
+let localMode = false;
+let localIndex = 0;
+const localAudio = new Audio();
+localAudio.preload = 'metadata';
+
+function getSpotifyUri(url){
+  if(!url) return '';
+  try{
+    const parsed = new URL(url);
+    if(!parsed.hostname.includes('spotify.com')) return '';
+    const parts = parsed.pathname.split('/').filter(Boolean);
+    if(parts.length >= 2 && parts[0] === 'playlist'){
+      return `spotify:playlist:${parts[1]}`;
+    }
+  } catch(e){
+    return '';
+  }
+  return '';
+}
+function getSpotifyEmbedUrl(url){
+  if(!url) return '';
+  try{
+    const parsed = new URL(url);
+    if(!parsed.hostname.includes('spotify.com')) return '';
+    const parts = parsed.pathname.split('/').filter(Boolean);
+    if(parts.length >= 2 && parts[0] === 'playlist'){
+      const qp = new URLSearchParams();
+      if(parsed.searchParams.get('si')) qp.set('si', parsed.searchParams.get('si'));
+      if(parsed.searchParams.get('pt')) qp.set('pt', parsed.searchParams.get('pt'));
+      qp.set('utm_source', 'generator');
+      return `https://open.spotify.com/embed/playlist/${parts[1]}?${qp.toString()}`;
+    }
+  } catch(e){
+    return '';
+  }
+  return '';
+}
+function spotifyHasPrivateToken(url){
+  if(!url) return false;
+  try{
+    return new URL(url).searchParams.has('pt');
+  } catch(e){
+    return false;
+  }
+}
+function updatePlayIcon(isPlaying){
+  spotifyIsPlaying = !!isPlaying;
+  if(playBtn) playBtn.textContent = spotifyIsPlaying ? '⏸︎' : '▶︎';
+}
+function loadLocalTrack(index){
+  const tracks = CONFIG.localTracks || [];
+  if(!tracks.length) return false;
+  localIndex = (index + tracks.length) % tracks.length;
+  const track = tracks[localIndex];
+  if(!track || !track.src) return false;
+  localAudio.src = track.src;
+  localAudio.load();
+  return true;
+}
+function enableLocalMode(){
+  if(localMode) return;
+  localMode = true;
+  spotifyFallbackMode = false;
+  if(spotifyFrame){
+    spotifyFrame.innerHTML = '<div style="color:#fff;font-size:.75rem;padding:12px;line-height:1.4;">Spotify no disponible en embed.<br>Reproduciendo audio alternativo.</div>';
+  }
+  if(!loadLocalTrack(localIndex)){
+    if(spotifyFrame){
+      spotifyFrame.innerHTML = '<div style="color:#ffb3b3;font-size:.75rem;padding:12px;line-height:1.4;">No hay archivos locales. Agrega MP3 en <code>media/</code>.</div>';
+    }
+  }
+  updatePlayIcon(false);
+}
+function setFallbackEmbed(autoplay){
+  if(!spotifyFrame) return;
+  const base = getSpotifyEmbedUrl(CONFIG.spotifyPlaylistUrl);
+  if(!base){
+    enableLocalMode();
+    return;
+  }
+  spotifyFallbackMode = true;
+  spotifyFrame.innerHTML = `<iframe src="${base}${base.includes('?') ? '&' : '?'}autoplay=${autoplay ? '1' : '0'}" width="100%" height="100%" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+  updatePlayIcon(!!autoplay);
+  setTimeout(()=>{
+    const iframe = spotifyFrame.querySelector('iframe');
+    if(!iframe) return;
+    iframe.addEventListener('error', enableLocalMode, { once:true });
+  }, 0);
+}
+function initSpotifyController(){
+  const uri = getSpotifyUri(CONFIG.spotifyPlaylistUrl);
+  if(!uri || !spotifyFrame || !spotifyApi) return;
+  spotifyApi.createController(spotifyFrame, { uri, width:'100%', height:'100%' }, (controller)=>{
+    spotifyController = controller;
+    spotifyFallbackMode = false;
+    updatePlayIcon(false);
+    controller.addListener('playback_update', (event)=>{
+      const data = event && event.data ? event.data : null;
+      if(data && typeof data.position === 'number') spotifyPlaybackPositionMs = data.position;
+      const isPaused = event && event.data ? event.data.isPaused : true;
+      updatePlayIcon(!isPaused);
+    });
+  });
+}
+if(FORCE_LOCAL_AUDIO){
+  enableLocalMode();
+} else if(spotifyHasPrivateToken(CONFIG.spotifyPlaylistUrl)){
+  // Shared private tokens (`pt`) usually fail inside embed; use guaranteed local playback.
+  enableLocalMode();
+} else {
+  window.onSpotifyIframeApiReady = (IFrameAPI)=>{
+    spotifyApi = IFrameAPI;
+    initSpotifyController();
+  };
+  if(!window.SpotifyIframeApi){
+    const script = document.createElement('script');
+    script.src = 'https://open.spotify.com/embed/iframe-api/v1';
+    script.async = true;
+    document.body.appendChild(script);
+  } else {
+    spotifyApi = window.SpotifyIframeApi;
+    initSpotifyController();
+  }
+  setTimeout(()=>{
+    if(!spotifyController) setFallbackEmbed(false);
+  }, 2500);
+}
+function togglePlayback(){
+  if(localMode){
+    if(!localAudio.src && !loadLocalTrack(localIndex)) return;
+    if(localAudio.paused){
+      localAudio.play().then(()=> updatePlayIcon(true)).catch(()=> updatePlayIcon(false));
+    } else {
+      localAudio.pause();
+      updatePlayIcon(false);
+    }
+    return;
+  }
+  if(spotifyFallbackMode){
+    setFallbackEmbed(!spotifyIsPlaying);
+    return;
+  }
+  if(!spotifyController) return;
+  if(typeof spotifyController.togglePlay === 'function'){
+    spotifyController.togglePlay();
+    return;
+  }
+  if(spotifyIsPlaying && typeof spotifyController.pause === 'function') spotifyController.pause();
+  else if(typeof spotifyController.play === 'function') spotifyController.play();
+  else if(typeof spotifyController.resume === 'function') spotifyController.resume();
+}
+function nextTrack(){
+  if(localMode){
+    if(loadLocalTrack(localIndex + 1)){
+      localAudio.play().then(()=> updatePlayIcon(true)).catch(()=> updatePlayIcon(false));
+    }
+    return;
+  }
+  if(spotifyFallbackMode) return;
+  if(!spotifyController) return;
+  if(typeof spotifyController.next === 'function'){
+    spotifyController.next();
+    return;
+  }
+  if(typeof spotifyController.seek === 'function'){
+    spotifyController.seek(spotifyPlaybackPositionMs + 30000);
+  }
+}
+function previousTrack(){
+  if(localMode){
+    if(loadLocalTrack(localIndex - 1)){
+      localAudio.play().then(()=> updatePlayIcon(true)).catch(()=> updatePlayIcon(false));
+    }
+    return;
+  }
+  if(spotifyFallbackMode) return;
+  if(!spotifyController) return;
+  if(typeof spotifyController.previous === 'function'){
+    spotifyController.previous();
+    return;
+  }
+  if(typeof spotifyController.restart === 'function'){
+    spotifyController.restart();
+    return;
+  }
+  if(typeof spotifyController.seek === 'function'){
+    spotifyController.seek(Math.max(0, spotifyPlaybackPositionMs - 30000));
+  }
+}
+function restartPlaylist(){
+  if(localMode){
+    if(loadLocalTrack(0)){
+      localAudio.pause();
+      localAudio.currentTime = 0;
+      updatePlayIcon(false);
+    }
+    return;
+  }
+  if(spotifyFallbackMode){
+    setFallbackEmbed(false);
+    return;
+  }
+  const uri = getSpotifyUri(CONFIG.spotifyPlaylistUrl);
+  if(!spotifyController || !uri || typeof spotifyController.loadUri !== 'function') return;
+  spotifyController.loadUri(uri);
+  spotifyController.pause();
+  updatePlayIcon(false);
+}
+localAudio.addEventListener('ended', ()=> nextTrack());
+localAudio.addEventListener('pause', ()=> { if(localMode) updatePlayIcon(false); });
+localAudio.addEventListener('play', ()=> { if(localMode) updatePlayIcon(true); });
+
+if(playBtn) playBtn.addEventListener('click', togglePlayback);
+if(wheelPlayPause) wheelPlayPause.addEventListener('click', togglePlayback);
+if(prevBtn) prevBtn.addEventListener('click', previousTrack);
+if(nextBtn) nextBtn.addEventListener('click', nextTrack);
+if(wheelMenu){
+  wheelMenu.addEventListener('click', restartPlaylist);
+}
+
+// gallery button: navigate to gallery page if it exists, otherwise scroll
+$('#galleryBtn').addEventListener('click', (e)=>{
+  e.preventDefault();
+  // if we're already on the gallery page, do nothing
+  if(location.pathname.endsWith('gallery.html')) return;
+  // try to open gallery.html; if it fails or not available, fallback to scrolling
+  const tryNav = () => {
+    const win = window.open('gallery.html','_self');
+    if(!win) {
+      // popup blocked? just scroll
+      const g = document.getElementById('gallerySection');
+      if(g) g.scrollIntoView({behavior:'smooth'});
+    }
+  };
+  tryNav();
+});
+
+// share
+$('#shareBtn').addEventListener('click', ()=>{
+  const shareData = { title: 'Nuestro Año', text: 'Mira esto', url: location.href };
+  if(navigator.share){
+    navigator.share(shareData).catch(()=>{});
+  } else if(navigator.clipboard && location.href){
+    navigator.clipboard.writeText(location.href).then(()=> alert('Enlace copiado') ).catch(()=>{
+      prompt('Copia este enlace manualmente:', location.href);
+    });
+  } else {
+    prompt('Copia este enlace:', location.href);
+  }
+});
+
+// heart mode
+const HEART_RAIN_BASE_INTERVAL_MS = 800;
+let heartRainIntervalMs = HEART_RAIN_BASE_INTERVAL_MS;
+let heartRainTimer = null;
+
+function startHeartRain(selector, intervalMs = HEART_RAIN_BASE_INTERVAL_MS){
+  const container = document.querySelector(selector) || document.body;
+  if(!container) return;
+  clearInterval(heartRainTimer);
+  heartRainIntervalMs = Math.max(90, intervalMs);
+  heartRainTimer = setInterval(()=>{
+    const heart = document.createElement('div');
+    heart.className='heart';
+    heart.style.left = Math.random()*100 + 'vw';
+    heart.style.animationDuration = (4 + Math.random()*3) + 's';
+    container.appendChild(heart);
+    setTimeout(()=> heart.remove(), 10000);
+  }, heartRainIntervalMs);
+}
+function stopHeartRain(){
+  clearInterval(heartRainTimer);
+  heartRainTimer = null;
+  document.querySelectorAll('.heart').forEach(h=>h.remove());
+}
+function spawnHeartBurst(selector, amount = 120){
+  const container = document.querySelector(selector) || document.body;
+  if(!container) return;
+  for(let i = 0; i < amount; i++){
+    const heart = document.createElement('div');
+    heart.className = 'heart';
+    heart.style.left = Math.random()*100 + 'vw';
+    heart.style.animationDuration = (2 + Math.random()*2.4) + 's';
+    heart.style.animationDelay = (Math.random()*0.5) + 's';
+    container.appendChild(heart);
+    setTimeout(()=> heart.remove(), 7000);
+  }
+}
+function boostHeartRain(){
+  const nextInterval = Math.max(90, Math.floor(heartRainIntervalMs * 0.65));
+  startHeartRain('#globalHearts', nextInterval);
+  spawnHeartBurst('#globalHearts', 160);
+}
+
+const modeBtn = $('#modeBtn');
+if(modeBtn){
+  modeBtn.addEventListener('click', boostHeartRain);
+}
+startHeartRain('#globalHearts');
+// service worker registration (safe/caught)
+if('serviceWorker' in navigator){
+  window.addEventListener('load', ()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{ /* fail silently */ });
+  });
+}
+</script>
+
+</body>
+</html>
+
+
+

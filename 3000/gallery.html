@@ -1,0 +1,1023 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GalerÃ­a de recuerdos âœ¨</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+:root{
+  --bg1:#1a1026;
+  --bg2:#0f061a;
+  --accent:#ff6b9d;
+  --accent-soft:#ffc2d9;
+  --text:#ffffff;
+  --muted:#cbbdd9;
+}
+body.demon{
+  background:radial-gradient(circle at 20% 20%, #3a0000, #100000) !important;
+  color:#ffdddd;
+} 
+
+*{margin:0;padding:0;box-sizing:border-box}
+
+body{
+  font-family:'Inter',sans-serif;
+  background:radial-gradient(circle at 20% 20%, #2a1240, var(--bg2));
+  color:var(--text);
+  overflow-x:hidden;
+}
+.top-left-countdown{
+  position:fixed;
+  top:14px;
+  left:14px;
+  z-index:250;
+  background:rgba(0,0,0,.38);
+  border:1px solid rgba(255,255,255,.2);
+  border-radius:14px;
+  padding:10px;
+  backdrop-filter:blur(8px);
+}
+.top-left-countdown .label{
+  font-size:.72rem;
+  color:var(--accent-soft);
+  margin-bottom:6px;
+  text-align:left;
+}
+.top-left-countdown .mini-row{
+  display:flex;
+  gap:8px;
+}
+.top-left-countdown .mini-box{
+  min-width:56px;
+  background:rgba(255,255,255,.1);
+  border-radius:10px;
+  padding:6px 8px;
+  text-align:center;
+}
+.top-left-countdown .mini-box span{
+  display:block;
+  font-weight:700;
+  font-size:1rem;
+}
+.top-left-countdown .mini-box small{
+  font-size:.68rem;
+  color:var(--muted);
+}
+body.locked{
+  overflow:hidden;
+}
+body.locked > *:not(#accessGate){
+  visibility:hidden;
+}
+body.unlocked > *:not(#accessGate){
+  visibility:visible;
+}
+#accessGate{
+  position:fixed;
+  inset:0;
+  z-index:10000;
+  background:radial-gradient(circle at 20% 20%, #2a1240, var(--bg2));
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+#accessGate.hidden{
+  display:none;
+}
+.gate-card{
+  width:min(420px, 100%);
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:24px;
+  padding:24px;
+  text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.45);
+  position:relative;
+  overflow:hidden;
+}
+.gate-card.success{
+  animation:gateSuccessPulse .9s ease forwards;
+}
+.gate-card h2{
+  font-family:'Playfair Display',serif;
+  margin-bottom:8px;
+}
+.gate-card p{
+  color:var(--muted);
+  margin-bottom:16px;
+}
+.gate-dots{
+  display:flex;
+  justify-content:center;
+  gap:10px;
+  margin-bottom:14px;
+}
+.gate-dot{
+  width:14px;
+  height:14px;
+  border-radius:50%;
+  border:1px solid rgba(255,255,255,.4);
+  background:transparent;
+}
+.gate-dot.filled{
+  background:var(--accent-soft);
+  border-color:var(--accent-soft);
+}
+.gate-dot.burst{
+  animation:dotBurst .5s ease;
+}
+.gate-status{
+  min-height:24px;
+  font-weight:600;
+  margin-bottom:14px;
+}
+.gate-pad{
+  display:grid;
+  grid-template-columns:repeat(3, 1fr);
+  gap:10px;
+}
+.gate-key{
+  border:none;
+  border-radius:14px;
+  padding:12px;
+  font-size:1rem;
+  font-weight:700;
+  cursor:pointer;
+  background:rgba(255,255,255,.15);
+  color:#fff;
+}
+.gate-key:hover{
+  background:rgba(255,255,255,.24);
+}
+.gate-heart{
+  position:absolute;
+  font-size:18px;
+  pointer-events:none;
+  animation:gateHeartUp 900ms ease-out forwards;
+  z-index:2;
+}
+@keyframes gateSuccessPulse{
+  0%{transform:scale(1); box-shadow:0 20px 60px rgba(0,0,0,.45);}
+  45%{transform:scale(1.04); box-shadow:0 0 30px rgba(255,194,217,.55), 0 20px 60px rgba(0,0,0,.45);}
+  100%{transform:scale(1);}
+}
+@keyframes gateHeartUp{
+  0%{transform:translateY(0) scale(.7); opacity:0;}
+  20%{opacity:1;}
+  100%{transform:translateY(-120px) scale(1.25); opacity:0;}
+}
+@keyframes dotBurst{
+  0%{transform:scale(1);}
+  40%{transform:scale(1.35);}
+  100%{transform:scale(1);}
+}
+.scroll-progress{position:fixed;top:0;left:0;height:4px;width:0;z-index:300;background:linear-gradient(90deg,#ff6b9d,#ffc2d9);box-shadow:0 0 18px rgba(255,107,157,.75);}
+.cursor-glow{position:fixed;width:24px;height:24px;border-radius:50%;pointer-events:none;z-index:210;background:radial-gradient(circle,rgba(255,194,217,.55) 0%, rgba(255,194,217,0) 70%);transform:translate(-50%,-50%);transition:opacity .2s ease;}
+.bg-orb{position:fixed;border-radius:50%;filter:blur(2px);z-index:0;opacity:.32;pointer-events:none;}
+.orb-1{width:240px;height:240px;background:radial-gradient(circle,#ff78a8 0%,rgba(255,120,168,0) 75%);top:8%;left:6%;animation:driftA 14s ease-in-out infinite;}
+.orb-2{width:320px;height:320px;background:radial-gradient(circle,#87bbff 0%,rgba(135,187,255,0) 75%);right:4%;top:25%;animation:driftB 18s ease-in-out infinite;}
+.orb-3{width:210px;height:210px;background:radial-gradient(circle,#ffd37d 0%,rgba(255,211,125,0) 75%);left:40%;bottom:8%;animation:driftA 16s ease-in-out infinite reverse;}
+@keyframes driftA{0%,100%{transform:translate3d(0,0,0);}50%{transform:translate3d(26px,-24px,0);}}
+@keyframes driftB{0%,100%{transform:translate3d(0,0,0);}50%{transform:translate3d(-30px,22px,0);}}
+.reveal{opacity:0;transform:translateY(18px) scale(.985);transition:opacity .65s ease, transform .65s ease;}
+.reveal.visible{opacity:1;transform:translateY(0) scale(1);}
+.tilt-card{transform-style:preserve-3d;transition:transform .18s ease, box-shadow .2s ease;will-change:transform;}
+
+section{padding:80px 20px;max-width:1200px;margin:auto}
+
+h1,h2{
+  font-family:'Playfair Display',serif;
+}
+h1,h2,h3{
+  text-decoration:underline;
+  text-decoration-color:rgba(255,194,217,.75);
+  text-decoration-thickness:2px;
+  text-underline-offset:10px;
+}
+
+.hero{min-height:40vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;position:relative;overflow:visible;}
+#hearts{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+#galleryHearts{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:1;}
+#globalHearts, #globalEmoji{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:0;}
+.gallery-grid{position:relative;z-index:2;} 
+.gallery-card{position:relative;background:rgba(255,255,255,.05);border-radius:20px;overflow:hidden;}
+.gallery-card img{display:block;width:100%;height:240px;object-fit:cover;}
+.gallery-card .info{padding:12px;color:var(--text);}
+.gallery-card .info h3{margin:0 0 4px;font-size:1.1rem;}
+.gallery-card .info small{display:none;}
+.gallery-card .info h3.empty-title{
+  margin:0 0 8px;
+  font-size:0;
+  line-height:0;
+  border-top:1px solid rgba(255,255,255,.22);
+}
+.gallery-card.linked{cursor:pointer;}
+.gallery-card.linked::after{
+  content:'Ver más';
+  position:absolute;
+  top:10px;
+  right:10px;
+  background:rgba(17,19,31,.8);
+  color:#fff;
+  font-size:.72rem;
+  padding:4px 8px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.25);
+}
+
+.button{margin-top:20px;padding:14px 32px;border-radius:50px;border:none;background:linear-gradient(135deg,var(--accent),#ff9ecb);color:#2a0f1f;font-weight:700;cursor:pointer;font-size:1rem;box-shadow:0 10px 40px rgba(255,107,157,.4);transition:.3s ease;}
+.button:hover{transform:scale(1.05);}
+.button.ghost{background:transparent;color:var(--accent);border:2px solid var(--accent);box-shadow:none;}
+.hero-buttons{display:flex;flex-wrap:wrap;justify-content:center;gap:12px;margin-top:20px;}
+.ipod-player{
+  position:fixed;
+  top:128px;
+  left:14px;
+  z-index:80;
+  width:150px;
+  transform-origin:top left;
+  transform:scale(1);
+}
+.ipod-device{width:100%;max-width:100%;padding:10px 10px 12px;border-radius:18px;background:linear-gradient(140deg,#f7f7f7 0%,#cacaca 38%,#ededed 100%);box-shadow:0 22px 45px rgba(0,0,0,.35), inset -8px -8px 16px rgba(255,255,255,.85), inset 10px 10px 18px rgba(0,0,0,.16);animation:ipodFloat 4s ease-in-out infinite;transform-style:preserve-3d;}
+.ipod-screen{background:#12141c;border:3px solid #21242e;border-radius:10px;overflow:hidden;box-shadow:inset 0 0 0 2px #9da1aa;}
+.screen-header{background:linear-gradient(180deg,#4f5668 0%, #313642 100%);color:#fff;padding:5px 8px;font-size:.74rem;text-align:left;font-weight:600;}
+.screen-content{padding:0;color:#111;background:#12141c;}
+.spotify-frame{width:100%;height:84px;border:0;border-radius:0;background:#12141c;}
+.click-wheel{width:96px;height:96px;margin:10px auto 0;border-radius:50%;position:relative;background:radial-gradient(circle at 32% 28%,#4a4f5c 10%,#1f222a 70%, #111319 100%);box-shadow:inset -8px -8px 14px rgba(255,255,255,.08), inset 10px 10px 15px rgba(0,0,0,.55);}
+.wheel-btn{position:absolute;border:none;background:transparent;color:#f0f0f0;cursor:pointer;font-weight:700;font-size:1rem;}
+.wheel-btn:hover{color:#fff;}
+#wheelMenu{top:8px;left:50%;transform:translateX(-50%);font-size:.62rem;letter-spacing:.08em;}
+#prevTrack{left:9px;top:50%;transform:translateY(-50%);font-size:.85rem;}
+#nextTrack{right:9px;top:50%;transform:translateY(-50%);font-size:.85rem;}
+#wheelPlayPause{bottom:8px;left:50%;transform:translateX(-50%);font-size:.66rem;}
+.wheel-center{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:44px;height:44px;border-radius:50%;border:none;background:linear-gradient(145deg,#f7f7f7,#cbcccf);color:#101114;font-size:.95rem;cursor:pointer;box-shadow:inset -3px -3px 8px rgba(255,255,255,.9), inset 5px 5px 10px rgba(0,0,0,.15);}
+.wheel-center:active{transform:translate(-50%,-50%) scale(.96);}
+@keyframes ipodFloat{0%,100%{transform:rotateY(-5deg) translateY(0);}50%{transform:rotateY(5deg) translateY(-8px);}}
+@media(max-width:700px){
+  .ipod-player{
+    top:104px;
+    left:10px;
+    width:130px;
+    transform:scale(1);
+  }
+  .ipod-device{width:100%;padding:8px 8px 10px;border-radius:16px;}
+  .spotify-frame{height:70px;}
+  .click-wheel{width:84px;height:84px;margin-top:8px;}
+  .wheel-center{width:38px;height:38px;font-size:.82rem;}
+  .cursor-glow{display:none;}
+  .top-left-countdown{
+    top:10px;
+    left:10px;
+    transform:scale(.92);
+    transform-origin:top left;
+  }
+}
+@media (max-height:720px){
+  .ipod-player{
+    width:118px;
+    top:100px;
+  }
+  .spotify-frame{height:62px;}
+  .click-wheel{width:76px;height:76px;}
+  .wheel-center{width:34px;height:34px;font-size:.76rem;}
+}
+
+.gallery-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:25px;margin-top:50px;}
+.gallery-grid img{width:100%;height:320px;object-fit:cover;border-radius:20px;transition:.5s ease;box-shadow:0 15px 40px rgba(0,0,0,.5);} 
+.gallery-grid img:hover{transform:scale(1.05);}
+.gallery-recap-title{
+  position:relative;
+  z-index:2;
+  text-align:center;
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.1rem,5.4vw,3.2rem);
+  color:var(--accent-soft);
+  letter-spacing:.04em;
+  margin-top:10px;
+  margin-bottom:10px;
+  text-shadow:0 8px 24px rgba(255,194,217,.25);
+}
+.gallery-recap-title::after{
+  content:'';
+  display:block;
+  width:120px;
+  height:3px;
+  margin:12px auto 0;
+  border-radius:999px;
+  background:linear-gradient(90deg, rgba(255,194,217,.2), rgba(255,194,217,1), rgba(255,194,217,.2));
+}
+.recap-lead{
+  position:relative;
+  z-index:2;
+  max-width:700px;
+  margin:22px auto 8px;
+  text-align:center;
+  color:var(--muted);
+  font-size:1.08rem;
+  line-height:1.6;
+}
+
+/* floating hearts */
+.heart{position:absolute;width:20px;height:20px;background:var(--accent);transform:rotate(-45deg);animation:float 8s linear infinite;}
+.heart::before,.heart::after{content:'';position:absolute;width:20px;height:20px;background:var(--accent);border-radius:50%;}
+.heart::before{top:-10px;left:0}
+.heart::after{left:10px;top:0}
+@keyframes float{0%{transform:translateY(100vh) rotate(-45deg);opacity:0}20%{opacity:1}100%{transform:translateY(-10vh) rotate(-45deg);opacity:0}}
+
+/* emoji rain */
+.emoji{position:absolute;font-size:24px;animation:fall 6s linear infinite;pointer-events:none;}
+@keyframes fall{0%{transform:translateY(-40px) rotate(0deg);opacity:1;}100%{transform:translateY(110vh) rotate(360deg);opacity:0;}}
+</style>
+</head>
+<body class="locked">
+<noscript><p style="text-align:center;color:#f88;padding:20px;">Activa JavaScript para ver esta pÃ¡gina correctamente.</p></noscript>
+<div id="accessGate" role="dialog" aria-modal="true" aria-label="Código de acceso">
+  <div class="gate-card">
+    <h2>Código de acceso</h2>
+    <p>Solo tú sabes la clave</p>
+    <div class="gate-dots" id="gateDots" aria-hidden="true">
+      <span class="gate-dot"></span>
+      <span class="gate-dot"></span>
+      <span class="gate-dot"></span>
+      <span class="gate-dot"></span>
+      <span class="gate-dot"></span>
+      <span class="gate-dot"></span>
+    </div>
+    <div class="gate-status" id="status"></div>
+    <div class="gate-pad">
+      <button class="gate-key" data-digit="1">1</button>
+      <button class="gate-key" data-digit="2">2</button>
+      <button class="gate-key" data-digit="3">3</button>
+      <button class="gate-key" data-digit="4">4</button>
+      <button class="gate-key" data-digit="5">5</button>
+      <button class="gate-key" data-digit="6">6</button>
+      <button class="gate-key" data-digit="7">7</button>
+      <button class="gate-key" data-digit="8">8</button>
+      <button class="gate-key" data-digit="9">9</button>
+      <button class="gate-key" id="clearCode">C</button>
+      <button class="gate-key" data-digit="0">0</button>
+      <button class="gate-key" id="delCode">⌫</button>
+    </div>
+  </div>
+</div>
+<div id="scrollProgress" class="scroll-progress" aria-hidden="true"></div>
+<div id="cursorGlow" class="cursor-glow" aria-hidden="true"></div>
+<div class="bg-orb orb-1" aria-hidden="true"></div>
+<div class="bg-orb orb-2" aria-hidden="true"></div>
+<div class="bg-orb orb-3" aria-hidden="true"></div>
+<div id="globalHearts" aria-hidden="true"></div>
+<div id="globalEmoji" aria-hidden="true"></div>
+<div class="top-left-countdown" id="topLeftCountdown" aria-live="polite">
+  <div class="label">Para nuestro próximo 9 de marzo</div>
+  <div class="mini-row">
+    <div class="mini-box"><span id="topDays">0</span><small>Días</small></div>
+    <div class="mini-box"><span id="topHours">0</span><small>Horas</small></div>
+    <div class="mini-box"><span id="topMinutes">0</span><small>Min</small></div>
+  </div>
+</div>
+
+<section class="hero">
+  <div id="hearts"></div>
+  <h1>Galeria de recuerdos de R&amp;P</h1>
+  <div class="hero-buttons">
+    <button class="button ghost" id="modeBtn">😈</button>
+    <button class="button ghost" id="backBtn">🔙 Volver</button>
+  </div>
+  <div id="audioContainer" class="ipod-player" aria-label="Reproductor estilo iPod">
+    <div class="ipod-device">
+      <div class="ipod-screen">
+        <div class="screen-header">t quiero 3000 elevado a infinito</div>
+        <div class="screen-content">
+          <div id="spotifyPlaylistFrame" class="spotify-frame" aria-label="Spotify Playlist"></div>
+        </div>
+      </div>
+      <div class="click-wheel">
+        <button id="wheelMenu" class="wheel-btn" title="Reiniciar lista">MENU</button>
+        <button id="prevTrack" class="wheel-btn" title="Pista anterior">⏮</button>
+        <button id="nextTrack" class="wheel-btn" title="Siguiente pista">⏭</button>
+        <button id="wheelPlayPause" class="wheel-btn" title="Reproducir/Pausar">▶︎∥</button>
+        <button id="playPause" class="wheel-center" title="Reproducir/Pausar">▶︎</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section style="position:relative;">
+  <div id="galleryHearts"></div>
+  <p class="recap-lead">Una cantidad de recuerdos, que no se pueden guardar solo en el pensamiento.</p>
+  <h2 class="gallery-recap-title">recap</h2>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<script>
+const gateElement = document.getElementById('accessGate');
+const gateCard = document.querySelector('#accessGate .gate-card');
+const statusElement = document.getElementById('status');
+const dotElements = Array.from(document.querySelectorAll('#gateDots .gate-dot'));
+const correctCombination = ['0','9','0','4','2','5'];
+let currentCombination = [];
+
+function updateGateDots(){
+  dotElements.forEach((dot, index)=>{
+    dot.classList.toggle('filled', index < currentCombination.length);
+  });
+}
+function closeGate(){
+  try{ sessionStorage.setItem('loveUnlocked', '1'); }catch(e){}
+  document.body.classList.remove('locked');
+  document.body.classList.add('unlocked');
+  if(gateElement) gateElement.classList.add('hidden');
+}
+function resetEntry(message){
+  currentCombination = [];
+  updateGateDots();
+  if(statusElement){
+    statusElement.textContent = message || '';
+    statusElement.style.color = '#fff';
+  }
+}
+function checkCombination() {
+  if (!statusElement) return;
+  if (currentCombination.join('') === correctCombination.join('')) {
+    statusElement.textContent = '¡Nuestro amor!';
+    statusElement.style.color = '#ffccd5';
+    playUnlockAnimation();
+    setTimeout(() => {
+      closeGate();
+    }, 1000);
+  } else {
+    statusElement.textContent = 'Intenta de nuevo, mi amor';
+    statusElement.style.color = '#fff';
+    setTimeout(() => resetEntry(''), 900);
+  }
+}
+function playUnlockAnimation(){
+  if(!gateCard) return;
+  gateCard.classList.remove('success');
+  void gateCard.offsetWidth;
+  gateCard.classList.add('success');
+  dotElements.forEach((dot, index)=>{
+    setTimeout(()=>{
+      dot.classList.remove('burst');
+      void dot.offsetWidth;
+      dot.classList.add('burst');
+    }, index * 40);
+  });
+  for(let i=0;i<16;i++){
+    const heart = document.createElement('span');
+    heart.className = 'gate-heart';
+    heart.textContent = Math.random() < 0.5 ? '❤' : '✨';
+    heart.style.left = `${Math.random() * 90 + 5}%`;
+    heart.style.bottom = `${Math.random() * 30 + 20}px`;
+    heart.style.animationDelay = `${Math.random() * 120}ms`;
+    gateCard.appendChild(heart);
+    setTimeout(()=> heart.remove(), 950);
+  }
+}
+function pushDigit(value){
+  if(currentCombination.length >= correctCombination.length) return;
+  currentCombination.push(String(value));
+  updateGateDots();
+  if(currentCombination.length === correctCombination.length){
+    checkCombination();
+  }
+}
+
+let gateUnlockedFromSession = false;
+try{
+  gateUnlockedFromSession = sessionStorage.getItem('loveUnlocked') === '1';
+} catch(e){
+  gateUnlockedFromSession = false;
+}
+if(gateUnlockedFromSession){
+  closeGate();
+} else {
+  document.body.classList.add('locked');
+  document.body.classList.remove('unlocked');
+}
+document.querySelectorAll('.gate-key[data-digit]').forEach((key)=>{
+  key.addEventListener('click', ()=> pushDigit(key.dataset.digit));
+});
+const clearCodeBtn = document.getElementById('clearCode');
+if(clearCodeBtn){
+  clearCodeBtn.addEventListener('click', ()=> resetEntry(''));
+}
+const delCodeBtn = document.getElementById('delCode');
+if(delCodeBtn){
+  delCodeBtn.addEventListener('click', ()=>{
+    if(!currentCombination.length) return;
+    currentCombination.pop();
+    updateGateDots();
+  });
+}
+document.addEventListener('keydown', (evt)=>{
+  if(gateUnlockedFromSession) return;
+  if(gateElement && gateElement.classList.contains('hidden')) return;
+  if(evt.key >= '0' && evt.key <= '9'){
+    pushDigit(evt.key);
+    return;
+  }
+  if(evt.key === 'Backspace'){
+    evt.preventDefault();
+    currentCombination.pop();
+    updateGateDots();
+    return;
+  }
+  if(evt.key.toLowerCase() === 'c'){
+    resetEntry('');
+  }
+});
+
+function nextMarch9(){
+  const now = new Date();
+  const year = now.getFullYear();
+  let target = new Date(`${year}-03-09T00:00:00`);
+  if(target <= now){
+    target = new Date(`${year+1}-03-09T00:00:00`);
+  }
+  return target;
+}
+function updateTopCountdown(){
+  const now = new Date();
+  const target = nextMarch9();
+  const diff = target - now;
+  const daysEl = document.getElementById('topDays');
+  const hoursEl = document.getElementById('topHours');
+  const minutesEl = document.getElementById('topMinutes');
+  if(!daysEl || !hoursEl || !minutesEl) return;
+  if(diff <= 0){
+    daysEl.textContent = '0';
+    hoursEl.textContent = '0';
+    minutesEl.textContent = '0';
+    return;
+  }
+  const days = Math.floor(diff / (1000*60*60*24));
+  const hours = Math.floor((diff / (1000*60*60)) % 24);
+  const minutes = Math.floor((diff / (1000*60)) % 60);
+  daysEl.textContent = days;
+  hoursEl.textContent = hours;
+  minutesEl.textContent = minutes;
+}
+setInterval(updateTopCountdown, 1000);
+updateTopCountdown();
+
+const CONFIG = {
+  spotifyPlaylistUrl:'https://open.spotify.com/playlist/1TvHPEsbb1aB8ldHqVRChi?si=bd1fd8d3b5534115',
+  localTracks:[
+    { title:'SoundHelix 1', artist:'Fallback Audio', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
+    { title:'SoundHelix 2', artist:'Fallback Audio', src:'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3' }
+  ],
+  photos:[
+    // standalone shots
+    {src:'fotos/foto1.jpeg',title:'Comienzo eterno',date:'2025-03-02'},
+    {src:'fotos/foto15.jpeg',title:'Viaje inolvidable',date:'2025-06-15'},
+    {src:'fotos/foto22.jpeg',title:'Tarde de risas',date:'2025-09-10'},
+    {src:'fotos/foto10.jpeg',title:'Romanticones',date:'2025-11-20'},
+    {src:'fotos/foto6.jpeg',title:'Paseos juntos',date:'2026-01-05'},
+    {src:'fotos/foto17.jpeg',title:'Concertazo',date:'2026-02-14'},
+    {src:'fotos/foto34.jpeg',title:'Instante especial',date:'2026-02-18'},
+    {src:'fotos/foto9.jpeg',title:'Recuerdo bonito II',date:'2026-02-19'},
+    {src:'fotos/foto5.jpeg',title:'Recuerdo bonito III',date:'2026-02-20'},
+    // carpeta viajes
+    {folder:'Viajes',items:[
+      {src:'fotos/foto82.jpeg',title:'Viaje inolvidable I',date:'2025-07-01'},
+      {src:'fotos/foto16.jpeg',title:'Viaje inolvidable II',date:'2025-07-02'},
+      {src:'fotos/foto15.jpeg',title:'Viaje inolvidable III',date:'2025-07-03'},
+      {src:'fotos/foto14.jpeg',title:'Viaje inolvidable IV',date:'2025-07-04'},
+      {src:'fotos/foto13.jpeg',title:'Viaje inolvidable V',date:'2025-07-05'},
+      {src:'fotos/foto12.jpeg',title:'Viaje inolvidable VI',date:'2025-07-06'}
+    ]},
+    // carpeta la bebe
+    {folder:'La bebe',items:[
+      {src:'fotos/foto29.jpeg',title:'La beebe 1 - Abrazo tierno',date:'2026-02-01'},
+      {src:'fotos/foto30.jpeg',title:'La beebe 2 - Sonrisa bonita',date:'2026-01-20'},
+      {src:'fotos/foto31.jpeg',title:'La beebe 3 - Mirada soñadora',date:'2026-01-30'},
+      {src:'fotos/foto73.jpeg',title:'La beebe 4 - Momento dulce',date:'2026-02-02'},
+      {src:'fotos/foto61.jpeg',title:'La beebe 5 - Selfie preciosa',date:'2026-02-03'},
+      {src:'fotos/foto71.jpeg',title:'La beebe 6 - Pose encantadora',date:'2026-02-04'}
+    ]},
+    // carpeta atardeceres
+    {folder:'Atardeceres',items:[
+      {src:'fotos/foto24.jpeg',title:'Luz dorada',date:'2025-08-19'},
+      {src:'fotos/foto27.jpeg',title:'Atardecer de película',date:'2025-10-02'},
+      {src:'fotos/foto47.jpeg',title:'Cielo para los dos',date:'2026-03-05'}
+    ]},
+    // carpeta guapitos
+    {folder:'Guapitos',items:[
+      {src:'fotos/foto7.jpeg',title:'Guapísimos I',date:'2026-02-10'},
+      {src:'fotos/foto8.jpeg',title:'Guapísimos II',date:'2026-02-11'},
+      {src:'fotos/foto26.jpeg',title:'Guapísimos III',date:'2026-02-12'},
+      {src:'fotos/foto28.jpeg',title:'Guapísimos IV',date:'2026-02-13'},
+          {src:'fotos/foto32.jpeg',title:'Guapísimos V',date:'2026-02-14'},
+          {src:'fotos/foto33.jpeg',title:'Guapísimos VI',date:'2026-02-15'},
+          {src:'fotos/foto36.jpeg',title:'Guapísimos VII',date:'2026-02-16'},
+          {src:'fotos/foto20.jpeg',title:'Guapísimos VIII',date:'2026-02-17'},
+          {src:'fotos/foto40.jpeg',title:'Guapísimos IX',date:'2026-02-18'},
+          {src:'fotos/foto42.jpeg',title:'Guapísimos X',date:'2026-02-19'}
+        ]},
+    // carpeta moments
+    {folder:'Moments',items:[
+        {src:'fotos/foto4.jpeg',title:'Risa que se pega',date:'2025-04-14'},
+        {src:'fotos/foto11.jpeg',title:'Bailando sin parar',date:'2025-11-05'},
+        {src:'fotos/foto3.jpeg',title:'Selfie de locura',date:'2025-12-12'},
+          {src:'fotos/foto38.jpeg',title:'Mirada cómplice',date:'2025-12-13'},
+          {src:'fotos/foto23.jpeg',title:'Abrazo que calma',date:'2026-01-12'},
+          {src:'fotos/foto39.jpeg',title:'Carcajada a dúo',date:'2026-01-13'},
+        {src:'fotos/foto21.jpeg',title:'Música y nosotros',date:'2026-02-08'},
+          {src:'fotos/foto25.jpeg',title:'Atardecer juntos',date:'2026-02-21'},
+          {src:'fotos/foto18.jpeg',title:'Besito robado',date:'2026-02-24'},
+          {src:'fotos/foto19.jpeg',title:'Noche de paseo',date:'2026-02-26'},
+          {src:'fotos/foto37.jpeg',title:'Sábado de mimos',date:'2026-02-28'},
+          {src:'fotos/foto43.jpeg',title:'Final de película',date:'2026-03-01'}
+        ]}
+  ]
+};
+
+// Force Moments to include every photo in /fotos except foto35
+const allMomentNumbers = Array.from({ length: 82 }, (_, i) => i + 1).filter((n)=> n !== 35);
+const allMomentItems = allMomentNumbers.map((n)=>({
+  src:`fotos/foto${n}.jpeg`,
+  title:'',
+  date:'Recuerdo'
+}));
+const momentsFolder = CONFIG.photos.find((item)=> item && item.folder === 'Moments');
+if(momentsFolder){
+  momentsFolder.items = allMomentItems;
+}
+
+function startHeartRain(containerSelector){
+  const container = containerSelector ? document.querySelector(containerSelector) : document.body;
+  if(!container) return;
+  heartInterval=setInterval(()=>{
+    const heart=document.createElement('div');
+    heart.className='heart';
+    heart.style.left=Math.random()*100+'vw';
+    heart.style.animationDuration=(6+Math.random()*5)+'s';
+    container.appendChild(heart);
+    setTimeout(()=>heart.remove(),10000);
+  },800);
+}
+function stopHeartRain(containerSelector){
+  clearInterval(heartInterval);
+  const sel = containerSelector || 'body';
+  document.querySelectorAll(sel+' .heart').forEach(h=>h.remove());
+}
+let heartInterval,emojiInterval,demonMode=false;
+function startEmojiRain(containerSelector){
+  const c=document.querySelector(containerSelector);
+  emojiInterval=setInterval(()=>{const e=document.createElement('div');e.className='emoji';e.textContent=Math.random()<0.5?'\uD83C\uDF51':'\uD83C\uDF46';e.style.left=Math.random()*100+'vw';c.appendChild(e);setTimeout(()=>e.remove(),7000);},260);
+}
+function stopEmojiRain(containerSelector){clearInterval(emojiInterval);document.querySelectorAll(containerSelector+' .emoji').forEach(e=>e.remove());}
+
+let revealObserver;
+function setupRevealObserver(){
+  if(revealObserver) revealObserver.disconnect();
+  revealObserver = new IntersectionObserver((entries)=>{
+    entries.forEach((entry)=>{
+      if(entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold:0.14 });
+}
+function attachTilt(element){
+  if(!element || element.dataset.tiltBound === '1') return;
+  element.dataset.tiltBound = '1';
+  element.classList.add('tilt-card');
+  element.addEventListener('pointermove', (e)=>{
+    const rect = element.getBoundingClientRect();
+    const rx = ((e.clientY - rect.top) / rect.height - 0.5) * -7;
+    const ry = ((e.clientX - rect.left) / rect.width - 0.5) * 9;
+    element.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+  });
+  element.addEventListener('pointerleave', ()=>{ element.style.transform = 'perspective(700px) rotateX(0) rotateY(0)'; });
+}
+function applyInteractiveHooks(){
+  if(!revealObserver) setupRevealObserver();
+  document.querySelectorAll('.hero, .gallery-card, .gallery-card img, .ipod-player').forEach((el)=>{
+    if(!el.classList.contains('reveal')) el.classList.add('reveal');
+    revealObserver.observe(el);
+  });
+  document.querySelectorAll('.gallery-card, .gallery-card img').forEach(attachTilt);
+}
+function initInteractiveScene(){
+  const progress = document.getElementById('scrollProgress');
+  const glow = document.getElementById('cursorGlow');
+  const magneticButtons = document.querySelectorAll('.hero-buttons .button');
+  window.addEventListener('scroll', ()=>{
+    const scrollMax = Math.max(document.body.scrollHeight - window.innerHeight, 1);
+    const pct = (window.scrollY / scrollMax) * 100;
+    if(progress) progress.style.width = `${Math.min(100, Math.max(0, pct))}%`;
+  }, { passive:true });
+  window.addEventListener('pointermove', (e)=>{
+    if(!glow) return;
+    glow.style.left = `${e.clientX}px`;
+    glow.style.top = `${e.clientY}px`;
+    glow.style.opacity = '1';
+  });
+  magneticButtons.forEach((btn)=>{
+    btn.addEventListener('pointermove', (e)=>{
+      const r = btn.getBoundingClientRect();
+      const x = ((e.clientX - r.left) / r.width - 0.5) * 10;
+      const y = ((e.clientY - r.top) / r.height - 0.5) * 8;
+      btn.style.transform = `translate(${x}px, ${y}px) scale(1.05)`;
+    });
+    btn.addEventListener('pointerleave', ()=>{ btn.style.transform = ''; });
+  });
+  applyInteractiveHooks();
+}
+
+const modeBtn = document.getElementById('modeBtn');
+if(modeBtn) modeBtn.textContent = '\uD83D\uDE08';
+modeBtn.addEventListener('click',()=>{
+  if(!demonMode){
+    demonMode=true;
+    document.body.classList.add('demon');
+    stopHeartRain('#globalHearts');
+    startEmojiRain('#globalEmoji');
+    grid.innerHTML = '';
+    // add the demon images now
+    demonImages.forEach(photo=> addPhoto(grid,photo));
+    applyInteractiveHooks();
+    modeBtn.textContent='\u2764\uFE0F';
+  } else {
+    demonMode=false;
+    document.body.classList.remove('demon');
+    stopEmojiRain('#globalEmoji');
+    startHeartRain('#globalHearts');
+    grid.innerHTML = savedGridHTML;
+    applyInteractiveHooks();
+    modeBtn.textContent='\uD83D\uDE08';
+  }
+});
+
+document.getElementById('backBtn').addEventListener('click',()=>{location.href='lita.html';});
+
+// build gallery (supports folders)
+const grid=document.getElementById('galleryGrid');
+const RECAP_DETAIL_MAP = {
+  'fotos/foto15.jpeg':'viaje-inolvidable',
+  'fotos/foto22.jpeg':'tardes-de-risas',
+  'fotos/foto10.jpeg':'cena-romantica',
+  'fotos/foto6.jpeg':'paseos-juntos',
+  'fotos/foto17.jpeg':'concertazo'
+};
+function addPhoto(cardParent,photo){
+  const card=document.createElement('div');card.className='gallery-card';
+  card.innerHTML=`<img src="${photo.src}" alt="${photo.title}"><div class="info"><h3>${photo.title}</h3></div>`;
+  const titleEl = card.querySelector('.info h3');
+  if(titleEl && (!photo.title || !String(photo.title).trim())){
+    titleEl.classList.add('empty-title');
+  }
+  const recapSet = RECAP_DETAIL_MAP[photo.src];
+  if(recapSet){
+    card.classList.add('linked');
+    card.dataset.recapSet = recapSet;
+  }
+  const img=card.querySelector('img');
+  img.onerror=()=>{img.style.opacity='0.5';};
+  cardParent.appendChild(card);
+}
+grid.addEventListener('click', (event)=>{
+  const card = event.target.closest('.gallery-card[data-recap-set]');
+  if(!card || !grid.contains(card)) return;
+  const set = card.dataset.recapSet;
+  if(!set) return;
+  location.href = `recap-detail.html?set=${encodeURIComponent(set)}`;
+});
+// demon-specific images to show when the diablo aparece
+const demonImages=[
+  {src:'fotos/foto41.jpeg',title:'Ojo del diablo',date:'2026-03-02'},
+  {src:'fotos/foto43.jpeg',title:'Fuego oscuro',date:'2026-03-02'},
+  {src:'fotos/foto68.jpeg',title:'Noche tentadora',date:'2026-03-02'},
+  {src:'fotos/foto66.jpeg',title:'Deseo encendido',date:'2026-03-02'}
+];
+
+CONFIG.photos.forEach(item=>{
+  if(item.folder && Array.isArray(item.items)){
+    // section header
+    const header=document.createElement('h2');
+    header.textContent=item.folder;
+    header.style.gridColumn='1/-1';
+    header.style.margin='40px 0 0';
+    header.style.fontFamily='Playfair Display,serif';
+    header.style.textAlign='center';
+    grid.appendChild(header);
+    item.items.forEach(photo=> addPhoto(grid,photo));
+  } else {
+    addPhoto(grid,item);
+  }
+});
+// save original content to restore later
+const savedGridHTML = grid.innerHTML;
+
+// start default rain globally
+startHeartRain('#globalHearts');
+initInteractiveScene();
+// spotify player in iPod screen
+const playBtn = document.getElementById('playPause');
+const prevBtn = document.getElementById('prevTrack');
+const nextBtn = document.getElementById('nextTrack');
+const wheelPlayPause = document.getElementById('wheelPlayPause');
+const wheelMenu = document.getElementById('wheelMenu');
+const spotifyFrame = document.getElementById('spotifyPlaylistFrame');
+let spotifyController = null;
+let spotifyIsPlaying = false;
+let spotifyApi = null;
+let spotifyFallbackMode = false;
+let spotifyPlaybackPositionMs = 0;
+const FORCE_LOCAL_AUDIO = false;
+let localMode = false;
+let localIndex = 0;
+const localAudio = new Audio();
+localAudio.preload = 'metadata';
+
+function getSpotifyUri(url){
+  if(!url) return '';
+  try{
+    const parsed = new URL(url);
+    if(!parsed.hostname.includes('spotify.com')) return '';
+    const parts = parsed.pathname.split('/').filter(Boolean);
+    if(parts.length >= 2 && parts[0] === 'playlist'){
+      return `spotify:playlist:${parts[1]}`;
+    }
+  } catch(e){ return ''; }
+  return '';
+}
+function getSpotifyEmbedUrl(url){
+  if(!url) return '';
+  try{
+    const parsed = new URL(url);
+    if(!parsed.hostname.includes('spotify.com')) return '';
+    const parts = parsed.pathname.split('/').filter(Boolean);
+    if(parts.length >= 2 && parts[0] === 'playlist'){
+      return `https://open.spotify.com/embed/playlist/${parts[1]}?utm_source=generator`;
+    }
+  } catch(e){ return ''; }
+  return '';
+}
+function loadLocalTrack(index){
+  const tracks = CONFIG.localTracks || [];
+  if(!tracks.length) return false;
+  localIndex = (index + tracks.length) % tracks.length;
+  const track = tracks[localIndex];
+  if(!track || !track.src) return false;
+  localAudio.src = track.src;
+  localAudio.load();
+  return true;
+}
+function enableLocalMode(){
+  if(localMode) return;
+  localMode = true;
+  spotifyFallbackMode = false;
+  if(spotifyFrame){
+    spotifyFrame.innerHTML = '<div style="color:#fff;font-size:.74rem;padding:10px;line-height:1.4;">Spotify no disponible.<br>Reproduciendo audio alternativo.</div>';
+  }
+  if(!loadLocalTrack(localIndex) && spotifyFrame){
+    spotifyFrame.innerHTML = '<div style="color:#ffb3b3;font-size:.74rem;padding:10px;line-height:1.4;">No hay audio alternativo disponible.</div>';
+  }
+  updatePlayIcon(false);
+}
+function updatePlayIcon(isPlaying){
+  spotifyIsPlaying = !!isPlaying;
+  if(playBtn) playBtn.textContent = spotifyIsPlaying ? '⏸︎' : '▶︎';
+}
+function setFallbackEmbed(autoplay){
+  if(!spotifyFrame) return;
+  const base = getSpotifyEmbedUrl(CONFIG.spotifyPlaylistUrl);
+  if(!base){
+    enableLocalMode();
+    return;
+  }
+  spotifyFallbackMode = true;
+  spotifyFrame.innerHTML = `<iframe src="${base}${base.includes('?') ? '&' : '?'}autoplay=${autoplay ? '1' : '0'}" width="100%" height="100%" frameborder="0" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>`;
+  updatePlayIcon(!!autoplay);
+}
+function initSpotifyController(){
+  const uri = getSpotifyUri(CONFIG.spotifyPlaylistUrl);
+  if(!uri || !spotifyFrame || !spotifyApi) return;
+  spotifyApi.createController(spotifyFrame, { uri, width:'100%', height:'100%' }, (controller)=>{
+    spotifyController = controller;
+    spotifyFallbackMode = false;
+    updatePlayIcon(false);
+    controller.addListener('playback_update', (event)=>{
+      const data = event && event.data ? event.data : null;
+      if(data && typeof data.position === 'number') spotifyPlaybackPositionMs = data.position;
+      const isPaused = event && event.data ? event.data.isPaused : true;
+      updatePlayIcon(!isPaused);
+    });
+  });
+}
+if(FORCE_LOCAL_AUDIO){
+  enableLocalMode();
+} else {
+  window.onSpotifyIframeApiReady = (IFrameAPI)=>{
+    spotifyApi = IFrameAPI;
+    initSpotifyController();
+  };
+  if(!window.SpotifyIframeApi){
+    const script = document.createElement('script');
+    script.src = 'https://open.spotify.com/embed/iframe-api/v1';
+    script.async = true;
+    document.body.appendChild(script);
+  } else {
+    spotifyApi = window.SpotifyIframeApi;
+    initSpotifyController();
+  }
+  setTimeout(()=>{
+    if(!spotifyController) enableLocalMode();
+  }, 2500);
+}
+function togglePlayback(){
+  if(localMode){
+    if(!localAudio.src && !loadLocalTrack(localIndex)) return;
+    if(localAudio.paused){
+      localAudio.play().then(()=> updatePlayIcon(true)).catch(()=> updatePlayIcon(false));
+    } else {
+      localAudio.pause();
+      updatePlayIcon(false);
+    }
+    return;
+  }
+  if(spotifyFallbackMode){
+    setFallbackEmbed(!spotifyIsPlaying);
+    return;
+  }
+  if(!spotifyController) return;
+  if(typeof spotifyController.togglePlay === 'function'){
+    spotifyController.togglePlay();
+    return;
+  }
+  if(spotifyIsPlaying && typeof spotifyController.pause === 'function') spotifyController.pause();
+  else if(typeof spotifyController.play === 'function') spotifyController.play();
+  else if(typeof spotifyController.resume === 'function') spotifyController.resume();
+}
+function nextTrack(){
+  if(localMode){
+    if(loadLocalTrack(localIndex + 1)){
+      localAudio.play().then(()=> updatePlayIcon(true)).catch(()=> updatePlayIcon(false));
+    }
+    return;
+  }
+  if(spotifyFallbackMode) return;
+  if(!spotifyController) return;
+  if(typeof spotifyController.next === 'function'){
+    spotifyController.next();
+    return;
+  }
+  if(typeof spotifyController.seek === 'function'){
+    spotifyController.seek(spotifyPlaybackPositionMs + 30000);
+  }
+}
+function previousTrack(){
+  if(localMode){
+    if(loadLocalTrack(localIndex - 1)){
+      localAudio.play().then(()=> updatePlayIcon(true)).catch(()=> updatePlayIcon(false));
+    }
+    return;
+  }
+  if(spotifyFallbackMode) return;
+  if(!spotifyController) return;
+  if(typeof spotifyController.previous === 'function'){
+    spotifyController.previous();
+    return;
+  }
+  if(typeof spotifyController.restart === 'function'){
+    spotifyController.restart();
+    return;
+  }
+  if(typeof spotifyController.seek === 'function'){
+    spotifyController.seek(Math.max(0, spotifyPlaybackPositionMs - 30000));
+  }
+}
+function restartPlaylist(){
+  if(localMode){
+    if(loadLocalTrack(0)){
+      localAudio.pause();
+      localAudio.currentTime = 0;
+      updatePlayIcon(false);
+    }
+    return;
+  }
+  if(spotifyFallbackMode){
+    setFallbackEmbed(false);
+    return;
+  }
+  const uri = getSpotifyUri(CONFIG.spotifyPlaylistUrl);
+  if(!spotifyController || !uri || typeof spotifyController.loadUri !== 'function') return;
+  spotifyController.loadUri(uri);
+  spotifyController.pause();
+  updatePlayIcon(false);
+}
+if(playBtn) playBtn.addEventListener('click', togglePlayback);
+if(wheelPlayPause) wheelPlayPause.addEventListener('click', togglePlayback);
+if(prevBtn) prevBtn.addEventListener('click', previousTrack);
+if(nextBtn) nextBtn.addEventListener('click', nextTrack);
+if(wheelMenu) wheelMenu.addEventListener('click', restartPlaylist);
+localAudio.addEventListener('ended', ()=> nextTrack());
+localAudio.addEventListener('pause', ()=> { if(localMode) updatePlayIcon(false); });
+localAudio.addEventListener('play', ()=> { if(localMode) updatePlayIcon(true); });
+</script>
+</body>
+</html>
